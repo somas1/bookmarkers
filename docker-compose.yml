@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  website:
+    build: .
+    command: >
+      gunicorn -b 0.0.0.0:8000
+        --access-logfile -
+        --reload
+        "bookmark_app.app:create_app()"
+    env_file:
+      - '.env'
+    volumes:
+      - '.:/bookmark_app'
+    ports:
+      - '8000:8000'
+
+  postgres:
+    image: 'postgres:9.5'
+    env_file:
+      - '.env'
+    volumes:
+      - '../docker_data_volumes:/var/lib/postgresql/data'
+    ports:
+      - '5432:5432'
+
+# volumes:
+  # The next line is commented because a folder
+  # on the mac mini will be the folder for postgres.
+  #
+  # postgres:
